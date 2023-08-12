@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=.fluence/schemas/fluence.json
+
+# Defines Fluence Project
+# Most importantly - what exactly you want to deploy and how
+# You can use `fluence init` command to generate a template for new Fluence project
+
+# A map with worker names as keys and worker configs as values
+workers:
+  # # worker name
+  defaultWorker:
+    services: [myService] # list of service names to be deployed to this worker
+    spells: [] # list of spell names to be deployed to this worker
+
+# A map with worker names as keys and deals as values
+deals:
+  # # worker name
+  defaultWorker:
+    minWorkers: 1 # required amount of workers to activate the deal
+    targetWorkers: 3 # max amount of workers in the deal
+
+# Path to the aqua file or directory with aqua files that you want to compile by default.
+# Must be relative to the project root dir
+aquaInputPath: src/aqua/main.aqua
+
+# nox multiaddresses that will be used by cli to connect to the Fluence network.
+# can be a list of multiaddresses or a name of the network.
+relays: testnet  # default: kras
+  # - /ip4/127.0.0.1/tcp/9991/ws/p2p/12D3KooWBM3SdXWqGaawQDGQ6JprtwswEg3FWGvGhmgmMez1vRbR
+  # - /ip4/127.0.0.1/tcp/9992/ws/p2p/12D3KooWQdpukY3p2DhDfUfDgphAqsGu5ZUrmQ4mcHSGrRag6gQK
+  # - /ip4/127.0.0.1/tcp/9993/ws/p2p/12D3KooWRT8V5awYdEZm6aAV9HWweCEbhWd7df4wehqHZXAB7yMZ
+hosts:
+  defaultWorker:
+    peerIds:
+      # - 12D3KooWBM3SdXWqGaawQDGQ6JprtwswEg3FWGvGhmgmMez1vRbR
+      # - 12D3KooWRT8V5awYdEZm6aAV9HWweCEbhWd7df4wehqHZXAB7yMZ
+      # - 12D3KooWDUszU2NeWyUVjCXhGEt1MoZrhvdmaQQwtZUriuGN1jTr  # kras
+      # - 12D3KooWFEwNWcHqi9rtsmDhsYcDbRUCDXH84RC4FW6UfsFWaoHi  # kras
+      - 12D3KooWGzNvhSDsgFoHwpWHAyPf1kcTYCGeRBPfznL8J6qdyu2H  # testnet
+      - 12D3KooWEXNUbCXooUwHrHBbrmjsrpHXoEphPwbjQXEGyzbqKnE9  # testnet
+# config version
+version: 2
+services:
+  myService:
+    get: src/services/myService

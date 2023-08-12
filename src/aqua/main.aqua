@@ -1,0 +1,40 @@
+aqua Main
+
+import "@fluencelabs/aqua-lib/builtin.aqua"
+import "@fluencelabs/registry/subnetwork.aqua"
+import  Record from "@fluencelabs/registry/registry-service.aqua"
+
+import "workers.aqua"
+import "services.aqua"
+
+export am_i_owner, greeting, get_workers, panicker
+
+func get_workers() -> []GetWorkersInfoHostsDefaultWorkerInstallationSpells:
+  info <- getWorkersInfo()
+  <- info.hosts.defaultWorker!.installationSpells
+
+func am_i_owner() -> []bool:
+    workers <- get_workers()
+    w0 = workers[0]
+    w1 = workers[1]
+
+    owner: *bool
+    on w0.workerId via w0.hostId:
+        owner <- MyService.am_i_owner()
+    on w1.workerId via w1.hostId:
+        owner <- MyService.am_i_owner()
+    <- owner
+
+func greeting(arg: string) -> string:
+    workers <- get_workers()
+    w = workers[1]
+    on w.workerId via w.hostId:
+        greeting <- MyService.greeting(arg)
+    <- greeting
+
+func panicker() -> string:
+    workers <- get_workers()
+    w = workers[1]
+    on w.workerId via w.hostId:
+        MyService.panicked()
+    <- "done"
